@@ -28,9 +28,12 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  graphql (~> 1.7)
+  graphql
   rerun
   sinatra
+
+RUBY VERSION
+   ruby 2.4.2p198
 
 BUNDLED WITH
    1.15.4
