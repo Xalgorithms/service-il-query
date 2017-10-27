@@ -1,7 +1,13 @@
 require 'sinatra'
+require 'sinatra/json'
 
 require_relative "./graph/app_schema"
 require_relative "./utils/hash_utils"
+
+# Used by Marathon healthcheck
+get "/status" do
+  json(status: :live)
+end
 
 get "/" do
   content_type :html
