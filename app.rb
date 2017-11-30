@@ -1,8 +1,17 @@
 require 'sinatra'
 require 'sinatra/json'
+require 'sinatra/config_file'
+require 'cassandra'
 
 require_relative "./graph/app_schema"
 require_relative "./utils/hash_utils"
+
+config_file 'config.yml'
+cluster = Cassandra.cluster(
+  hosts: settings.db_hosts,
+  port: settings.db_port
+)
+$session  = cluster.connect(settings.db_keyspace)
 
 # Used by Marathon healthcheck
 get "/status" do

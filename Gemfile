@@ -9,6 +9,7 @@ gem 'puma'
 gem "sinatra"
 gem 'sinatra-contrib'
 gem "graphql"
+gem 'cassandra-driver'
 
 group :development do
   gem "rerun"
