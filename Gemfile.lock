@@ -2,8 +2,11 @@ GEM
   remote: https://rubygems.org/
   specs:
     backports (3.10.3)
+    cassandra-driver (3.2.0)
+      ione (~> 1.2)
     ffi (1.9.18)
     graphql (1.7.4)
+    ione (1.2.4)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
@@ -38,6 +41,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  cassandra-driver
   graphql
   puma
   rerun
