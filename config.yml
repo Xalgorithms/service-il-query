@@ -1,13 +1,7 @@
 development:
-  db_hosts: ["127.0.0.1"]
-  db_port: 9042
-  db_username: ''
-  db_password: ''
-  db_keyspace: xadf
+  mongo:
+    url: 'mongodb://127.0.0.1:27017/xadf'
 
 production:
-  db_hosts: ["127.0.0.1"]
-  db_port: 9042
-  db_username: ''
-  db_password: ''
-  db_keyspace: xadf
+  mongo:
+    url: 'mongodb://127.0.0.1:27017/xadf'

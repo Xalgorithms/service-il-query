@@ -1,36 +1,34 @@
 require 'sinatra'
 require 'sinatra/json'
 require 'sinatra/config_file'
-require 'cassandra'
 
-require_relative "./graph/app_schema"
-require_relative "./utils/hash_utils"
+require_relative "./services/documents"
 
 config_file 'config.yml'
-cluster = Cassandra.cluster(
-  hosts: settings.db_hosts,
-  port: settings.db_port
-)
-$session  = cluster.connect(settings.db_keyspace)
+
+client = Services::Documents.new(settings.mongo)
 
 # Used by Marathon healthcheck
 get "/status" do
   json(status: :live)
 end
 
-get "/" do
-  content_type :html
-  erb :graphiql
+get "/documents" do
+  content_type :json
+  client.find_all_documents()
 end
 
-post "/graphql" do
-  params = JSON.parse(request.body.read)
-  query_string = params["query"]
-  query_variables = ensure_hash(params["variables"])
-  result = ApplicationSchema.execute(
-    query_string,
-    variables: query_variables,
-    context: {}
-  )
-  result.to_json
+get "/documents/:id" do
+  content_type :json
+  client.find_document_by_id(params[:id])
+end
+
+get "/documents/:id/revisions" do
+  content_type :json
+  client.find_document_revisions(params[:id])
+end
+
+get "/documents/:doc_id/revisions/:rev_id" do
+  content_type :json
+  client.find_document_revision_by_id(params[:doc_id], params[:rev_id])
 end
