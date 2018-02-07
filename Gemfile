@@ -1,15 +1,14 @@
 # frozen_string_literal: true
 source "https://rubygems.org"
 
-ruby '2.4.2'
+ruby "2.4.2"
 
 git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 
-gem 'puma'
+gem "puma"
 gem "sinatra"
-gem 'sinatra-contrib'
-gem "graphql"
-gem 'cassandra-driver'
+gem "sinatra-contrib"
+gem "mongo"
 
 group :development do
   gem "rerun"
