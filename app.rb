@@ -4,9 +4,7 @@ require 'sinatra/config_file'
 
 require_relative "./services/documents"
 
-config_file 'config.yml'
-
-client = Services::Documents.new(settings.mongo)
+client = Services::Documents.new
 
 # Used by Marathon healthcheck
 get "/status" do
