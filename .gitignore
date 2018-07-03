@@ -51,3 +51,4 @@ build-iPhoneSimulator/
 
 .DS_Storeproject/target
 target
+logs/
