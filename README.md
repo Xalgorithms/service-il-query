@@ -9,7 +9,6 @@ or the output of those operations.
 
 # Install and Run
 ```
-$ gem install bundler
-$ bundle install
-$ bundle exec rerun 'ruby app.rb'
+$ brew install sbt
+$ sbt run
 ```
