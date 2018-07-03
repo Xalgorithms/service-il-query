@@ -21,7 +21,7 @@
 // License along with this program. If not, see
 // <http://www.gnu.org/licenses/>.
 lazy val VERSION_MONGO_SCALA       = "2.3.0"
-lazy val VERSION_SCALA             = "2.12.4"
+lazy val VERSION_SCALA             = "2.11.11"
 lazy val VERSION_SCALA_TEST        = "3.1.2"
 lazy val VERSION_CASSANDRA         = "3.5.0"
 lazy val VERSION_AKKA_STREAM_KAFKA = "0.20"
