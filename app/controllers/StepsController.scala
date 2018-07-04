@@ -40,6 +40,18 @@ class StepsController @Inject()(cc: ControllerComponents) extends AbstractContro
 
   import services.Bson.Implicits.val_writes
 
+  def index(trace_id: String) = Action.async {
+    _mongo.find_one(MongoActions.FindTraceById(trace_id)).map { doc =>
+      Documents.maybe_find_array(doc.toBsonDocument, "steps").map(_.asScala) match {
+        case Some(steps) => {
+          Ok(Json.toJson(steps))
+        }
+
+        case None => NotFound(Json.obj("status" -> "failure_no_steps_in_trace"))
+      }
+    }
+  }
+
   def show(trace_id: String, number: Int) = Action.async {
     _mongo.find_one(MongoActions.FindTraceById(trace_id)).map { doc =>
       Documents.maybe_find_array(doc.toBsonDocument, "steps").map(_.asScala) match {

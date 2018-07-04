@@ -6,4 +6,5 @@ GET  /documents/:id                   controllers.DocumentsController.show(id: S
 GET  /requests/:request_id/traces     controllers.TracesController.by_request(request_id: String)
 GET  /traces/:id                      controllers.TracesController.show(id: String)
 
+GET  /traces/:trace_id/steps          controllers.StepsController.index(trace_id: String)
 GET  /traces/:trace_id/steps/:number  controllers.StepsController.show(trace_id: String, number: Int)
