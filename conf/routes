@@ -1,1 +1,9 @@
-GET     /status                     controllers.StatusController.index
+GET  /status                          controllers.StatusController.index
+
+GET  /documents                       controllers.DocumentsController.index
+GET  /documents/:id                   controllers.DocumentsController.show(id: String)
+
+GET  /requests/:request_id/traces     controllers.TracesController.by_request(request_id: String)
+GET  /traces/:id                      controllers.TracesController.show(id: String)
+
+GET  /traces/:trace_id/steps/:number  controllers.StepsController.show(trace_id: String, number: Int)
