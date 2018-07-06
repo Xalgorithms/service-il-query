@@ -27,6 +27,10 @@ import play.api.mvc._
 import play.api.libs.json._
 import scala.util.{ Success, Failure }
 
+// ours
+import org.xalgorithms.storage.bson.BsonJson
+
+// local
 import services.{ Mongo, MongoActions }
 
 // FIXME: actor system context
@@ -36,8 +40,8 @@ import scala.concurrent.ExecutionContext.Implicits.global
 class TracesController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
   private val _mongo = new Mongo()
 
-  import services.Bson.Implicits.val_writes
-  import services.Bson.Implicits.doc_writes
+  import BsonJson.Implicits.val_writes
+  import BsonJson.Implicits.doc_writes
 
   def by_request(request_id: String) = Action.async {
     _mongo.find_many(MongoActions.FindManyTracesByRequestId(request_id)).map { docs =>

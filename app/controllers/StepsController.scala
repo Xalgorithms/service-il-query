@@ -29,6 +29,7 @@ import play.api.mvc._
 import play.api.libs.json._
 import scala.util.{ Success, Failure }
 
+import org.xalgorithms.storage.bson.BsonJson
 import org.xalgorithms.storage.bson.Find
 
 import services.{ Mongo, MongoActions }
@@ -40,7 +41,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 class StepsController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
   private val _mongo = new Mongo()
 
-  import services.Bson.Implicits.val_writes
+  import BsonJson.Implicits.val_writes
 
   def index(trace_id: String) = Action.async {
     _mongo.find_one(MongoActions.FindTraceById(trace_id)).map { doc =>
