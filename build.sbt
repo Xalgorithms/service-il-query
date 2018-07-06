@@ -33,6 +33,9 @@ lazy val VERSION_JODA              = "2.10"
 lazy val VERSION_JODA_CONVERT      = "2.1"
 lazy val VERSION_AVRO4S            = "1.9.0"
 
+// ours
+lazy val VERSION_STORAGE           = "0.0.1"
+
 lazy val meta = Seq(
   name := """il-service-query""",
   organization := "org.xalgorithms",

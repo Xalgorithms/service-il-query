@@ -29,7 +29,9 @@ import play.api.mvc._
 import play.api.libs.json._
 import scala.util.{ Success, Failure }
 
-import services.{ Documents, Mongo, MongoActions }
+import org.xalgorithms.storage.bson.Find
+
+import services.{ Mongo, MongoActions }
 
 // FIXME: actor system context
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -42,7 +44,7 @@ class StepsController @Inject()(cc: ControllerComponents) extends AbstractContro
 
   def index(trace_id: String) = Action.async {
     _mongo.find_one(MongoActions.FindTraceById(trace_id)).map { doc =>
-      Documents.maybe_find_array(doc.toBsonDocument, "steps").map(_.asScala) match {
+      Find.maybe_find_array_as_seq(doc.toBsonDocument, "steps") match {
         case Some(steps) => {
           Ok(Json.toJson(steps))
         }
@@ -54,7 +56,7 @@ class StepsController @Inject()(cc: ControllerComponents) extends AbstractContro
 
   def show(trace_id: String, number: Int) = Action.async {
     _mongo.find_one(MongoActions.FindTraceById(trace_id)).map { doc =>
-      Documents.maybe_find_array(doc.toBsonDocument, "steps").map(_.asScala) match {
+      Find.maybe_find_array_as_seq(doc.toBsonDocument, "steps") match {
         case Some(steps) => {
           if (number < steps.size) {
             Ok(Json.toJson(steps(number)))
