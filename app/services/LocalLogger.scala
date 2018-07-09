@@ -20,40 +20,22 @@
 // You should have received a copy of the GNU Affero General Public
 // License along with this program. If not, see
 // <http://www.gnu.org/licenses/>.
-package controllers
+package services
 
-import javax.inject._
-import play.api.mvc._
-import play.api.libs.json._
-import scala.util.{ Success, Failure }
+import org.xalgorithms.storage.data.{ Logger }
 
-// ours
-import org.xalgorithms.storage.bson.BsonJson
-import org.xalgorithms.storage.data.{ MongoActions }
+import play.api.{ Logger => PlayLogger }
 
-// local
-import services.InjectableMongo
-
-// FIXME: actor system context
-import scala.concurrent.ExecutionContext.Implicits.global
-
-@Singleton
-class DocumentsController @Inject()(
-  cc: ControllerComponents,
-  mongo: InjectableMongo
-) extends AbstractController(cc) {
-  import BsonJson.Implicits.val_writes
-  import BsonJson.Implicits.doc_writes
-
-  def index = Action.async {
-    mongo.find_many(MongoActions.FindManyDocuments()).map { docs =>
-      Ok(Json.toJson(docs))
-    }
+class LocalLogger extends Logger {
+  def debug(m: String) = {
+    PlayLogger.debug(m)
   }
 
-  def show(id: String) = Action.async { req =>
-    mongo.find_one(MongoActions.FindDocumentById(id)).map { doc =>
-      Ok(Json.toJson(doc))
-    }
+  def error(m: String) = {
+    PlayLogger.error(m)
+  }
+
+  def info(m: String) = {
+    PlayLogger.info(m)
   }
 }

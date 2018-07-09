@@ -29,22 +29,25 @@ import play.api.mvc._
 import play.api.libs.json._
 import scala.util.{ Success, Failure }
 
+// ours
 import org.xalgorithms.storage.bson.BsonJson
 import org.xalgorithms.storage.bson.Find
+import org.xalgorithms.storage.data.{ MongoActions }
 
-import services.{ Mongo, MongoActions }
+// local
+import services.InjectableMongo
 
 // FIXME: actor system context
 import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton
-class StepsController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
-  private val _mongo = new Mongo()
-
+class StepsController @Inject()(
+  cc: ControllerComponents, mongo: InjectableMongo
+) extends AbstractController(cc) {
   import BsonJson.Implicits.val_writes
 
   def index(trace_id: String) = Action.async {
-    _mongo.find_one(MongoActions.FindTraceById(trace_id)).map { doc =>
+    mongo.find_one(MongoActions.FindTraceById(trace_id)).map { doc =>
       Find.maybe_find_array_as_seq(doc.toBsonDocument, "steps") match {
         case Some(steps) => {
           Ok(Json.toJson(steps))
@@ -56,7 +59,7 @@ class StepsController @Inject()(cc: ControllerComponents) extends AbstractContro
   }
 
   def show(trace_id: String, number: Int) = Action.async {
-    _mongo.find_one(MongoActions.FindTraceById(trace_id)).map { doc =>
+    mongo.find_one(MongoActions.FindTraceById(trace_id)).map { doc =>
       Find.maybe_find_array_as_seq(doc.toBsonDocument, "steps") match {
         case Some(steps) => {
           if (number < steps.size) {

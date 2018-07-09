@@ -29,28 +29,30 @@ import scala.util.{ Success, Failure }
 
 // ours
 import org.xalgorithms.storage.bson.BsonJson
+import org.xalgorithms.storage.data.{ MongoActions }
 
 // local
-import services.{ Mongo, MongoActions }
+import services.InjectableMongo
 
 // FIXME: actor system context
 import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton
-class TracesController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
-  private val _mongo = new Mongo()
-
+class TracesController @Inject()(
+  cc: ControllerComponents,
+  mongo: InjectableMongo
+) extends AbstractController(cc) {
   import BsonJson.Implicits.val_writes
   import BsonJson.Implicits.doc_writes
 
   def by_request(request_id: String) = Action.async {
-    _mongo.find_many(MongoActions.FindManyTracesByRequestId(request_id)).map { docs =>
+    mongo.find_many(MongoActions.FindManyTracesByRequestId(request_id)).map { docs =>
       Ok(Json.toJson(docs))
     }
   }
 
   def show(id: String) = Action.async {
-    _mongo.find_one(MongoActions.FindTraceById(id)).map { doc =>
+    mongo.find_one(MongoActions.FindTraceById(id)).map { doc =>
       Ok(Json.toJson(doc))
     }
   }
