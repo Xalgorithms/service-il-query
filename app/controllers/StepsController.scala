@@ -46,21 +46,27 @@ class StepsController @Inject()(
 ) extends AbstractController(cc) {
   import BsonJson.Implicits.val_writes
 
-  def index(trace_id: String) = Action.async {
-    mongo.find_one(MongoActions.FindTraceById(trace_id)).map { doc =>
-      Find.maybe_find_array_as_seq(doc.toBsonDocument, "steps") match {
-        case Some(steps) => {
-          Ok(Json.toJson(steps))
-        }
+  // TODO: become find_trace_steps
 
-        case None => NotFound(Json.obj("status" -> "failure_no_steps_in_trace"))
+  private def find_trace_steps(id: String) = mongo.find_one(MongoActions.FindTraceById(id)).map {
+    opt_doc => opt_doc.map(_.toBsonDocument) match {
+      case Some(doc) => Find.maybe_find_array_as_seq(doc, "steps")
+      case None => None
+    }
+  }
+
+  def index(trace_id: String) = Action.async {
+    find_trace_steps(trace_id).map { opt_steps =>
+      opt_steps match {
+        case Some(steps) => Ok(Json.toJson(steps))
+        case None => NotFound(Json.obj("status" -> "failure_no_steps", "args" -> Map("id" -> trace_id)))
       }
     }
   }
 
   def show(trace_id: String, number: Int) = Action.async {
-    mongo.find_one(MongoActions.FindTraceById(trace_id)).map { doc =>
-      Find.maybe_find_array_as_seq(doc.toBsonDocument, "steps") match {
+    find_trace_steps(trace_id).map { opt_steps =>
+      opt_steps match {
         case Some(steps) => {
           if (number < steps.size) {
             Ok(Json.toJson(steps(number)))
@@ -68,8 +74,7 @@ class StepsController @Inject()(
             NotFound(Json.obj("status" -> "failure_no_such_step"))
           }
         }
-
-        case None => NotFound(Json.obj("status" -> "failure_no_steps_in_trace"))
+        case None => NotFound(Json.obj("status" -> "failure_no_steps", "args" -> Map("id" -> trace_id)))
       }
     }
   }

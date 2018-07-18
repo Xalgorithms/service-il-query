@@ -46,7 +46,7 @@ class DocumentsController @Inject()(
   import BsonJson.Implicits.doc_writes
 
   def index = Action.async {
-    mongo.find_many(MongoActions.FindManyDocuments()).map { docs =>
+    mongo.find_many(MongoActions.Find("documents")).map { docs =>
       Ok(Json.toJson(docs))
     }
   }
