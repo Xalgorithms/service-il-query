@@ -30,4 +30,5 @@ import org.xalgorithms.storage.data.Mongo
 @Singleton
 class InjectableMongo extends Mongo(
   new LocalLogger(),
-  sys.env.get("MONGO_URL"))
+  sys.env.get("MONGO_URL"),
+  sys.env.get("MONGO_DATABASE"))
