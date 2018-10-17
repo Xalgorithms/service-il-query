@@ -38,29 +38,16 @@ import services.InjectableMongo
 import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton
-class RulesController @Inject()(
+class NamespacesController @Inject()(
   cc: ControllerComponents,
   mongo: InjectableMongo
 ) extends AbstractController(cc) {
   import BsonJson.Implicits.val_writes
   import BsonJson.Implicits.doc_writes
 
-  def index = Action.async {
-    mongo.find_many(MongoActions.Find("rules")).map { os =>
-      Ok(Json.toJson(os))
-    }
-  }
-
-  def show(id: String) = Action.async { req =>
-    mongo.find_one(MongoActions.FindByKey("rules", "public_id", id)).map { o =>
+  def show(name: String) = Action.async { req =>
+    mongo.find_one(MongoActions.FindByKey("rules", "ns", name)).map { o =>
       Ok(Json.toJson(o))
-    }
-  }
-
-  def by_ns_and_name(ns: String, rule: String) = Action.async { req =>
-    val keys = Map("ns" -> ns, "name" -> rule)
-    mongo.find_many(MongoActions.FindByKeys("rules", keys)).map { os =>
-      Ok(Json.toJson(os))
     }
   }
 }

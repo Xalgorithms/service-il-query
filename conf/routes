@@ -6,8 +6,11 @@ GET  /documents/:id                   controllers.DocumentsController.show(id: S
 GET  /rules                           controllers.RulesController.index
 GET  /rules/:id                       controllers.RulesController.show(id: String)
 
-GET  /requests/:request_id/traces     controllers.TracesController.by_request(request_id: String)
-GET  /traces/:id                      controllers.TracesController.show(id: String)
+GET  /requests/:request_id/traces       controllers.TracesController.by_request(request_id: String)
+GET  /traces/:id                        controllers.TracesController.show(id: String)
 
-GET  /traces/:trace_id/steps          controllers.StepsController.index(trace_id: String)
-GET  /traces/:trace_id/steps/:number  controllers.StepsController.show(trace_id: String, number: Int)
+GET  /traces/:trace_id/steps            controllers.StepsController.index(trace_id: String)
+GET  /traces/:trace_id/steps/:number    controllers.StepsController.show(trace_id: String, number: Int)
+
+GET /namespaces/:name                   controllers.NamespacesController.show(name: String)
+GET /namespaces/:ns/rules/by_name/:rule controllers.RulesController.by_ns_and_name(ns: String, rule: String)
